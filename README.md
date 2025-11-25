@@ -12,8 +12,8 @@ Method: `POST`
 Body (JSON):
 ```json
 {
-  "email": "student@example.com",  // Обязательно
-  "password": "strongpassword",    // Обязательно
+  "email": "student@example.com",
+  "password": "strongpassword",  
   "first_name": "Ivan",
   "last_name": "Ivanov",
   "role": "student"                // Варианты: "student", "employer", "admin". По дефолту: "student"
