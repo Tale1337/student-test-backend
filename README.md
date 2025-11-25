@@ -16,9 +16,10 @@ Body (JSON):
   "password": "strongpassword",  
   "first_name": "Ivan",
   "last_name": "Ivanov",
-  "role": "student"                // Варианты: "student", "employer", "admin". По дефолту: "student"
+  "role": "student"
 }
 ```
+Варианты роли: "student", "employer", "admin". По дефолту: "student"
 
 Ответ (201 Created):
 ```json
@@ -62,7 +63,7 @@ Body (JSON):
 }
 ```
 
-**Ошибка (401 Unauthorized):**
+Ошибка (401 Unauthorized):
 ```json
 {
   "error": "Неверный email или пароль"
@@ -74,7 +75,7 @@ Body (JSON):
 ## 3. Главная страница (Защищено)
 URL: `/api/main/`
 Method: `GET`
-Доступ: Только для авторизованных пользователей (нужна кука).
+Доступ: Только для авторизованных пользователей.
 
 Ответ (200 OK):
 ```json
