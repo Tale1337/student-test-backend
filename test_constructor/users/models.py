@@ -36,11 +36,9 @@ class CustomUser(AbstractUser):
 
     second_name = models.CharField(max_length=150, blank=True, null=True)
 
-    # Указывание Django, что логин через почту
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    # Подключение менеджера
     objects = CustomUserManager()
 
     def __str__(self):

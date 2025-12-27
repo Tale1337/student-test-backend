@@ -5,7 +5,6 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import CustomUser
 
 
-# 1. РЕГИСТРАЦИЯ
 @csrf_exempt
 def register_api(request):
     if request.method == 'POST':
@@ -18,11 +17,9 @@ def register_api(request):
             first_name = data.get('first_name')
             last_name = data.get('last_name')
 
-            # Проверка: занят ли email
             if CustomUser.objects.filter(email=email).exists():
                 return JsonResponse({'error': 'Такой email уже зарегистрирован'}, status=400)
 
-            # Создание пользователя
             user = CustomUser.objects.create_user(
                 email=email,
                 password=password,
@@ -37,7 +34,6 @@ def register_api(request):
     return JsonResponse({'error': 'Метод не поддерживается'}, status=405)
 
 
-# 2. ВХОД (LOGIN)
 @csrf_exempt
 def login_api(request):
     if request.method == 'POST':

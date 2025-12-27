@@ -9,6 +9,7 @@ db.sqlite3-journal
 venv/
 .venv/
 env/
+.env
 
 .idea/
 .vscode/
