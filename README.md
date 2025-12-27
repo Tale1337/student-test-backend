@@ -116,7 +116,7 @@ Method: `POST`
 ```json
 {
   "title": "Тест с процентным подсчитыванием",
-  "description": "Нужно набрать 80%",
+  "description": "Нужно набрать 80% за 1 час",
   "time_limit": 3600,
   "passing_score": 80,
   "evaluation_method": "percent"
