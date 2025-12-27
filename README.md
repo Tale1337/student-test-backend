@@ -115,13 +115,22 @@ Method: `POST`
 Входные данные:
 ```json
 {
-  "title": "Сложный экзамен",
+  "title": "Тест с процентным подсчитыванием",
   "description": "Нужно набрать 80%",
   "time_limit": 3600,
   "passing_score": 80,
   "evaluation_method": "percent"
 }
-
+```
+ИЛИ
+```json
+{
+    "title": "Тест с побальными подсчитыванием",
+    "description": "Нужно набрать 6 баллов",
+    "time_limit": 3600,
+    "passing_score": 6,
+    "evaluation_method": "points"
+}
 ```
 
 Ответ:
