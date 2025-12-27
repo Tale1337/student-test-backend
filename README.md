@@ -108,8 +108,8 @@ Method: `GET` (или POST)
 ```
 
 ## 5. Создать новый тест
-URL: /api/tests/
-Method: POST
+URL: `/api/tests/`
+Method: `POST`
 Доступ: Работодатель, Админ.
 
 Входные данные:
@@ -133,8 +133,8 @@ Method: POST
 ```
 
 ## 6. Добавить вопрос в тест
-URL: /api/tests/<test_id>/questions/
-Method: POST
+URL: `/api/tests/<test_id>/questions/`
+Method: `POST`
 Доступ: Только автор теста.
 
 ```json
@@ -210,8 +210,8 @@ Method: POST
 ```
 
 ## 7. Получить информацию о тесте (Обложка)
-URL: /api/tests/<test_id>/
-Method: GET
+URL: `/api/tests/<test_id>/`
+Method: `GET`
 Описание: Возвращает название, описание и время, но БЕЗ вопросов. Используется для экрана "Начать тест".
 ```json
 {
@@ -223,8 +223,8 @@ Method: GET
 ```
 
 ## 8. Начать тест (Создать попытку)
-URL: /api/tests/<test_id>/start/
-Method: POST
+URL: `/api/tests/<test_id>/start/`
+Method: `POST`
 
 Ответ:
 ```json
@@ -235,15 +235,15 @@ Method: POST
 ```
 
 ## 9. Получить вопросы теста
-URL: /api/tests/<test_id>/questions/
-Method: GET
+URL: `/api/tests/<test_id>/questions/`
+Method: `GET`
 Важно: Студент получит ошибку 403, если не нажал "Начать тест" (нет активной попытки).
 
 Ответ: Список вопросов. Поля is_correct, correct_answers и т.д. вырезаны.
 
 ## 10. Отправить ответ на вопрос
-URL: /api/tests/attempts/<attempt_id>/submit_answer/
-Method: POST
+URL: `/api/tests/attempts/<attempt_id>/submit_answer/`
+Method: `POST`
 ```json
 
 {
@@ -252,15 +252,15 @@ Method: POST
 }
 ```
 Форматы selected_answer:
-single: 1 (ID выбранного варианта, число)
-multi: [1, 3] (Массив ID выбранных вариантов)
-input: "Текст ответа" (Строка)
-match: {"ru": "mos", "de": "ber"} (Объект: ID ключа -> ID значения)
-sequence: [2, 1] (Массив ID вариантов в том порядке, как расставил студент)
+single: `1` (ID выбранного варианта, число)
+multi: `[1, 3]` (Массив ID выбранных вариантов)
+input: `"Текст ответа"` (Строка)
+match: `{"ru": "mos", "de": "ber"}` (Объект: ID ключа -> ID значения)
+sequence: `[2, 1]` (Массив ID вариантов в том порядке, как расставил студент)
 
 ## 11. Завершить тест
-URL: /api/tests/attempts/<attempt_id>/finish/
-Method: POST
+URL: `/api/tests/attempts/<attempt_id>/finish/`
+Method: `POST`
 
 Ответ:
 ```json
