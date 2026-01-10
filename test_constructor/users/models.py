@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager, Group
+
 
 
 # 1. Менеджер юзеров
@@ -41,5 +42,27 @@ class CustomUser(AbstractUser):
 
     objects = CustomUserManager()
 
-    def __str__(self):
-        return self.email
+    def save(self, *args, **kwargs):
+
+        # 1. Логика пропуска (is_staff)
+        if self.role == 'admin':
+            self.is_staff = True
+        elif not self.is_superuser:
+            self.is_staff = False
+
+        super().save(*args, **kwargs)
+
+        # 2. Логика прав (Группа)
+        if self.role == 'admin':
+            try:
+                group = Group.objects.get(name='Managers')
+                self.groups.add(group)
+            except Group.DoesNotExist:
+                pass
+
+        elif not self.is_superuser:
+            try:
+                group = Group.objects.get(name='Managers')
+                self.groups.remove(group)
+            except Group.DoesNotExist:
+                pass

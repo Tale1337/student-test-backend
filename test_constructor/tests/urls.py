@@ -8,4 +8,5 @@ urlpatterns = [
     path('<int:test_id>/start/', views.start_test_view),
     path('attempts/<int:attempt_id>/submit_answer/', views.submit_answer_view),
     path('attempts/<int:attempt_id>/finish/', views.finish_test_view),
+    path('my-attempts/', views.user_attempts_view),  # История студента
 ]

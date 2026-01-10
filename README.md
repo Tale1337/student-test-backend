@@ -10,17 +10,16 @@ URL: `/api/register/`
 Method: `POST`
 
 Body (JSON):
+
 ```json
 {
   "email": "student@example.com",
-  "password": "strongpassword",  
+  "password": "strongpassword",
   "first_name": "Ivan",
   "last_name": "Ivanov",
-  "role": "student"
+  "second_name": "Ivanovich"
 }
 ```
-Варианты роли: "student", "employer", "admin". По дефолту: "student"
-
 Ответ (201 Created):
 ```json
 {
@@ -254,7 +253,6 @@ Method: `GET`
 URL: `/api/tests/attempts/<attempt_id>/submit_answer/`
 Method: `POST`
 ```json
-
 {
     "question_id": 10,
     "selected_answer": ... // Формат зависит от типа вопроса
@@ -280,3 +278,63 @@ Method: `POST`
     "feedback": "Поздравляем! Вы сдали тест."
 }
 ```
+
+## 12. Получить все мои тесты (для работодателя и админа)
+URL: `/api/tests/`
+Method: `GET`
+
+```json
+[
+    {
+        "id": 3,
+        "title": "Ещё один экзамен"
+    },
+  ...
+]
+```
+## 13. Получить все мои попытки тестов
+URl: `/api/tests/my-attempts/`
+Method: `GET`
+```json
+[
+    {
+        "attempt_id": 1,
+        "test_title": "Ещё один экзамен",
+        "status": "finished",
+        "score": 11,
+        "max_score": 80,
+        "date": "28.12.2025"
+    },
+  ...
+]
+```
+
+## 14. Мой профиль
+URL: `/api/profile/`
+Method: `GET`
+```json
+{
+    "first_name": "Петр",
+    "last_name": "Петров",
+    "second_name": "Петрович",
+    "email": "21@test.com",
+    "role": "student"
+}
+```
+
+## 15. Редактировать мой профиль
+URL: `/api/profile/`
+Method: `PATCH`
+
+```json
+{
+    "first_name": "Петр",        // Опционально
+    "last_name": "Петров",       // Опционально
+    "second_name": "Петрович",   // Опционально
+    "email": "21@test.com",     // Опционально
+    "password": "newpassword123" // Опционально
+}
+```
+
+## Админка Django
+URL: `/admin/`

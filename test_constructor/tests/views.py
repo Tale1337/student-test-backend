@@ -8,6 +8,7 @@ from django.utils import timezone
 from .models import Test, Question, TestAttempt, UserAnswer
 
 
+
 def clean_answers_for_student(q_type, answers_json):
     """
     Убирает поля 'is_correct', 'correct_matches' и т.д.
@@ -108,25 +109,35 @@ def test_list_create_view(request):
         return JsonResponse({'error': 'Не авторизован'}, status=401)
 
     if request.method == 'GET':
-        if request.user.role == 'student':
-            return JsonResponse({'error': 'Студентам нельзя просматривать тесты'}, status=403)
+        user = request.user
 
-        tests = Test.objects.all()
+        if user.role == 'student':
+            # tests = Test.objects.filter(status='published')
+            return JsonResponse({'error': 'Только у работодателей и админов есть тесты.'}, status=403)
+
+        else:
+            tests = Test.objects.filter(author=user)
+
         data = []
         for t in tests:
             data.append({
                 'id': t.id,
                 'title': t.title,
                 'description': t.description,
-                'author': t.author.email,
+                'status': t.status,
                 'questions_count': t.questions.count(),
-                'is_owner': request.user == t.author
+                'created_at': t.created_at.strftime('%Y-%m-%d %H:%M'),
+                # 'is_owner': user == t.author
             })
         return JsonResponse(data, safe=False)
 
+    # СОЗДАНИЕ ТЕСТА
     if request.method == 'POST':
-        if request.user.role == 'student':
-            return JsonResponse({'error': 'Студентам нельзя создавать тесты'}, status=403)
+
+        ALLOWED_ROLES = ['employer', 'admin']
+
+        if request.user.role not in ALLOWED_ROLES:
+            return JsonResponse({'error': 'Только работодатели и админы могут создавать тесты'}, status=403)
 
         try:
             body = json.loads(request.body)
@@ -347,3 +358,42 @@ def finish_test_view(request, attempt_id):
         })
 
     return JsonResponse({'error': 'Только POST'}, status=405)
+
+
+@csrf_exempt
+def user_attempts_view(request):
+    """
+    GET: Возвращает список всех попыток текущего пользователя (История)
+    """
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Не авторизован'}, status=401)
+
+    if request.method == 'GET':
+        attempts = TestAttempt.objects.filter(user=request.user).select_related('test').order_by('-started_at')
+
+        data = []
+        for attempt in attempts:
+            # Вычисляем, сдал или нет (та же логика, что при завершении)
+            test = attempt.test
+            passed = False
+
+            if attempt.status == 'finished':
+                if test.evaluation_method == 'points':
+                    passed = attempt.total_score >= test.passing_score
+                elif test.evaluation_method == 'percent':
+                    pass
+
+            data.append({
+                'attempt_id': attempt.id,
+                'test_title': test.title,
+                'status': attempt.status,
+                'score': attempt.total_score,
+                'max_score': test.passing_score,
+                # 'started_at': attempt.started_at.strftime('%Y-%m-%d %H:%M'),
+                # 'finished_at': attempt.finished_at.strftime('%Y-%m-%d %H:%M') if attempt.finished_at else None,
+                'date': attempt.finished_at.strftime('%d.%m.%Y') if attempt.finished_at else None
+            })
+
+        return JsonResponse(data, safe=False)
+
+    return JsonResponse({'error': 'Только GET'}, status=405)

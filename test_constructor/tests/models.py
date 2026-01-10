@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from django.utils import timezone
 
 
 class Test(models.Model):
@@ -46,7 +45,7 @@ class Test(models.Model):
     success_message = models.TextField(blank=True, default="Поздравляем! Вы сдали тест.")
     failure_message = models.TextField(blank=True, default="К сожалению, тест не сдан.")
 
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='published')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

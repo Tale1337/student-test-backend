@@ -28,6 +28,33 @@ class CustomUserAdmin(UserAdmin):
          ),
     )
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+
+        if not request.user.is_superuser:
+
+            if 'is_superuser' in form.base_fields:
+                form.base_fields['is_superuser'].disabled = True
+            if 'user_permissions' in form.base_fields:
+                form.base_fields['user_permissions'].disabled = True
+            if 'is_staff' in form.base_fields:
+                form.base_fields['is_staff'].disabled = True
+            if 'groups' in form.base_fields:
+                form.base_fields['groups'].disabled = True
+
+            if 'role' in form.base_fields:
+                form.base_fields['role'].choices = [
+                    (k, v) for k, v in CustomUser.ROLES if k != 'admin'
+                ]
+
+        return form
+
+    # Запрет Младшему Админу удалять Суперюзеров
+    def has_delete_permission(self, request, obj=None):
+        if obj and obj.is_superuser and not request.user.is_superuser:
+            return False
+        return super().has_delete_permission(request, obj)
+
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.unregister(Group)
