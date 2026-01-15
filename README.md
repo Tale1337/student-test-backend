@@ -217,21 +217,44 @@ Method: `POST`
 }
 ```
 
-## 7. Получить информацию о тесте (Обложка)
+## 7. Получить информацию о тесте, как создатель теста
 URL: `/api/tests/<test_id>/`
 Method: `GET`
-Описание: Возвращает название, описание и время, но БЕЗ вопросов. Используется для экрана "Начать тест".
 ```json
 {
-    "id": 7,
-    "title": "Финальный тест API",
-    "description": "Проверка всех систем",
-    "time_limit": 3600, // В секундах
+    "id": 1,
+    "title": "Ещё один экзамен",
+    "description": "Нужно набрать 80%",
+    "time_limit": 3600,
+    "passing_score": 80,
+    "evaluation_method": "percent"
 }
 ```
 
-## 8. Начать тест (Создать попытку)
-URL: `/api/tests/<test_id>/start/`
+## 8. Поделиться тестом
+URL: `/api/tests/<test_id>/share/`
+Method: `GET`
+Описание: для прохождения теста использовать этот uuid
+```json
+{
+    "test_public_uuid": "83a54e70-8d0f-4734-a2a5-bff22a4d0eb0"
+}
+```
+
+## 9. Получить информацию о тесте, как человек, проходящий тест
+URL: `/api/tests/<test_public_uuid>/`
+Method: `GET`
+```json
+{
+    "title": "Ещё один экзамен",
+    "description": "Нужно набрать 80%",
+    "time_limit": 3600,
+    "questions_count": 1
+}
+```
+
+## 10. Начать тест (Создать попытку)
+URL: `/api/tests/<test_public_uuid>/start/`
 Method: `POST`
 
 Ответ:
@@ -242,14 +265,15 @@ Method: `POST`
 }
 ```
 
-## 9. Получить вопросы теста
+## 11. Получить вопросы теста, как создатель теста
 URL: `/api/tests/<test_id>/questions/`
 Method: `GET`
-Важно: Студент получит ошибку 403, если не нажал "Начать тест" (нет активной попытки).
 
-Ответ: Список вопросов. Поля is_correct, correct_answers и т.д. вырезаны.
+## 12. Получить вопросы теста, как проходящий тест
+URL: `/api/tests/<test_public_uuid>/questions/`
+Method: `GET`
 
-## 10. Отправить ответ на вопрос
+## 13. Отправить ответ на вопрос
 URL: `/api/tests/attempts/<attempt_id>/submit_answer/`
 Method: `POST`
 ```json
@@ -265,7 +289,7 @@ input: `"Текст ответа"` (Строка)
 match: `{"ru": "mos", "de": "ber"}` (Объект: ID ключа -> ID значения)
 sequence: `[2, 1]` (Массив ID вариантов в том порядке, как расставил студент)
 
-## 11. Завершить тест
+## 14. Завершить тест
 URL: `/api/tests/attempts/<attempt_id>/finish/`
 Method: `POST`
 
@@ -279,7 +303,7 @@ Method: `POST`
 }
 ```
 
-## 12. Получить все мои тесты (для работодателя и админа)
+## 15. Получить все мои тесты (для работодателя и админа)
 URL: `/api/tests/`
 Method: `GET`
 
@@ -292,7 +316,32 @@ Method: `GET`
   ...
 ]
 ```
-## 13. Получить все мои попытки тестов
+## 16. Удалить тест
+URL: `/api/tests/<test_id/`
+Method: `DELETE`
+
+## 17. Удалить вопрос
+URL: `/api/tests/questions/<question_id>/`
+Method: `DELETE`
+
+## 18. Изменить вопрос:
+URL: `/api/tests/questions/<question_id>/`
+Method: `PATCH`
+
+```json
+{
+    "text": "Исправленный текст вопроса", // Опционально
+    "points": 2,                          // Опционально
+    "answer_data": {
+        "options": [
+            {"id": 1, "text": "Новый вариант ответа", "is_correct": true}, 
+            {"id": 2, "text": "Старый вариант", "is_correct": false}
+        ]
+    }                                     // Опционально
+}
+```
+
+## 19. Получить все мои попытки тестов
 URl: `/api/tests/my-attempts/`
 Method: `GET`
 ```json
@@ -309,7 +358,7 @@ Method: `GET`
 ]
 ```
 
-## 14. Мой профиль
+## 20. Мой профиль
 URL: `/api/profile/`
 Method: `GET`
 ```json
@@ -322,7 +371,7 @@ Method: `GET`
 }
 ```
 
-## 15. Редактировать мой профиль
+## 21. Редактировать мой профиль
 URL: `/api/profile/`
 Method: `PATCH`
 
