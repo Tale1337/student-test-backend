@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+import uuid
 
 
 class Test(models.Model):
@@ -48,6 +49,8 @@ class Test(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='published')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    public_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, verbose_name="Публичная ссылка")
 
     def __str__(self):
         return self.title
